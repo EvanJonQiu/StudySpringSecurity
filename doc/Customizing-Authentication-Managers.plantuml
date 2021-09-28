@@ -1,0 +1,48 @@
+@startuml
+
+
+together {
+abstract class WebSecurityConfigurerAdapter {
+    +configure(AuthenticationManagerBuilder builder)
+}
+
+class ApplicationSecurityConfigurer extends WebSecurityConfigurerAdapter {
+    -UserDetailsServiceImpl userDetialService
+    +configure(AuthenticationManagerBuilder auth)
+    --Beans--
+    +PasswordEncoder encoder()
+}
+
+note left of ApplicationSecurityConfigurer::configure
+auth.userDetailsService(userDetialService).passwordEncoder(encoder);
+end note
+
+note left of ApplicationSecurityConfigurer::encoder
+new BCryptPasswordEncoder()
+end note
+
+interface UserDetailsService {
+    +UserDetails loadUserByUsername(String username)
+}
+
+class UserDetailsServiceImpl implements UserDetailsService {
+    -UserRepository userRepository
+    +UserDetails loadUserByUsername(String username)
+}
+
+note right of UserDetailsServiceImpl::loadUserByUsername
+    SysUser sysUser = this.userRepository.findByUsername(username);
+    if (sysUser == null) {
+        throw new UsernameNotFoundException("User '" + username + "' not found");
+    }
+    return new SysUserDetails(sysUser);
+end note
+
+class UserRepository {
+    +SysUser findByUsername(String username)
+}
+
+UserDetailsServiceImpl - UserRepository
+ApplicationSecurityConfigurer - UserDetailsServiceImpl
+}
+@enduml

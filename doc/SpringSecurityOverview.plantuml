@@ -1,0 +1,50 @@
+@startuml
+/'
+    SpringIO Authentication overview
+'/
+
+package Authentication {
+
+interface AuthenticationManager {
+    +Authentication authenticate(Authentication authentication)
+}
+
+class ProviderManager implements AuthenticationManager {
+    -List<AuthenticationProvider> providers
+    -AuthenticationManager parent
+    
+    +Authentication authenticate(Authentication authentication)
+}
+
+interface AuthenticationProvider {
+    +Authentication authenticate(Authentication authentication)
+}
+
+class CustomAuthenticationProvider implements AuthenticationProvider{
+    +Authentication authenticate(Authentication authentication)
+}
+
+ProviderManager "1" o-- "*" CustomAuthenticationProvider : 聚合
+ProviderManager -- ProviderManager : parent
+
+}
+
+abstract class WebSecurityConfigurerAdapter {
+    +configure(AuthenticationManagerBuilder builder)
+    #configure(HttpSecurity http)
+}
+
+package Customizing-Authentication-Managers {
+class ApplicationSecurityConfigurer1 extends WebSecurityConfigurerAdapter {
+    +configure(AuthenticationManagerBuilder builder)
+}
+}
+
+package Creating-and-Customizing-Filter-Chains {
+
+class ApplicationSecurityConfigurer2 extends WebSecurityConfigurerAdapter {
+    #configure(HttpSecurity http)
+}
+}
+
+@enduml

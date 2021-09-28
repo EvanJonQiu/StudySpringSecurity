@@ -1,0 +1,14 @@
+@startuml
+
+participant 客户端 as client
+participant 服务端 as server
+participant 认证中心 as appConfig
+participant 用户信息服务 as userDetailsServiceImpl
+
+client -> server: 登录
+server -> appConfig: 开始认证
+appConfig -> userDetailsServiceImpl: 获取用户信息
+appConfig --> server: 返回
+server --> client: 返回
+
+@enduml
