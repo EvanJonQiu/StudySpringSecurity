@@ -87,7 +87,7 @@ public class ApplicationSecurityConfigurer extends WebSecurityConfigurerAdapter 
                 .accessDeniedHandler(authAccessDeniedHandler)
                 .and()
             .logout()
-                .addLogoutHandler(authLogoutHandler)
+                //.addLogoutHandler(authLogoutHandler)
                 .logoutSuccessHandler(authLogoutSuccessHandler).permitAll();
     }
 

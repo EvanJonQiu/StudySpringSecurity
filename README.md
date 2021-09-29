@@ -62,3 +62,6 @@ public CorsConfigurationSource corsConfigurationSource() {
 
 1. [Spring boot 入门之CORS 跨域配置详解](https://www.leftso.com/blog/303.html)
 2. [SpringBoot添加支持CORS跨域访问](https://www.cnblogs.com/shihaiming/p/8716830.html)
+
+## 配置说明
+1. [配置说明](./doc/config.md)

@@ -3,6 +3,11 @@ logging:
     root: warn
     '[com.evanjon.studySpring]': debug
     
+server:
+  servlet:
+    session:
+      timeout: 15m
+      
 spring:
   jpa:
     database: POSTGRESQL
@@ -20,6 +25,11 @@ spring:
     init:
       platform: postgresql
       mode: never
+  session:
+    store-type: redis
+  redis:
+    host: localhost
+    port: 6379
       
 app:
-  origin: "localhost"
+  origin: "localhost:8080"
