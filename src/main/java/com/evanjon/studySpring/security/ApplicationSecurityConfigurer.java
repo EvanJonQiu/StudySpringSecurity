@@ -73,10 +73,9 @@ public class ApplicationSecurityConfigurer extends WebSecurityConfigurerAdapter 
             .authenticationEntryPoint(authEntryPoint)
             .and()
             
-            .antMatcher("/**")
             .authorizeRequests()
                 .antMatchers("/", "/login**").permitAll()
-                .antMatchers("/user/**").access("hasRole('ROLE_ADMIN')")
+                .antMatchers("/users/**").access("hasRole('ROLE_ADMIN')")
                 .anyRequest().authenticated()
                 .and()
             
