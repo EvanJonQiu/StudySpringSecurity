@@ -11,14 +11,17 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.evanjon.studySpring.config.AppConfig;
 import com.evanjon.studySpring.security.filter.AuthFilter;
+import com.evanjon.studySpring.security.filter.JwtTokenFilter;
 import com.evanjon.studySpring.security.handler.AuthAccessDeniedHandler;
 import com.evanjon.studySpring.security.handler.AuthFailureHandler;
 import com.evanjon.studySpring.security.handler.AuthLogoutHandler;
@@ -60,6 +63,9 @@ public class ApplicationSecurityConfigurer extends WebSecurityConfigurerAdapter 
     private AuthProvider authProvider;
     
     @Autowired
+    private JwtTokenFilter jwtTokenFilter;
+    
+    @Autowired
     private AppConfig appConfig;
 
     @Override
@@ -69,6 +75,14 @@ public class ApplicationSecurityConfigurer extends WebSecurityConfigurerAdapter 
         http.cors()
             .and()
             .csrf().disable()
+            
+            /**
+             * 如果使用JWT，则需要打开这段代码
+             */
+            .sessionManagement()
+            .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            .and()
+            
             .httpBasic()
             .authenticationEntryPoint(authEntryPoint)
             .and()
@@ -87,7 +101,13 @@ public class ApplicationSecurityConfigurer extends WebSecurityConfigurerAdapter 
                 .and()
             .logout()
                 //.addLogoutHandler(authLogoutHandler)
-                .logoutSuccessHandler(authLogoutSuccessHandler).permitAll();
+                .logoutSuccessHandler(authLogoutSuccessHandler).permitAll()
+                .and()
+                
+                /**
+                 * 将JWT filter放置到UsernamePasswordAuthenticationFilter之前起作用
+                 */
+                .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
     @Override

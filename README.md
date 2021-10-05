@@ -20,20 +20,24 @@
 ## 前后端分离认证
 
 ### 说明
+
 很多项目都采用前后端分离架构，即前端页面通过AJAX调用后端的Rest接口进行交互。
 
 ### 步骤
+
 1. [步骤](./doc/custom-authentication-for-rest.md)
 
 ## CORS配置
 
 ### 说明
+
 在spring boot下配置CORS
 
 在spring security说明中有如下描述：
 > Spring Framework provides first class support for CORS. CORS must be processed before Spring Security because the pre-flight request will not contain any cookies (i.e. the JSESSIONID). If the request does not contain any cookies and Spring Security is first, the request will determine the user is not authenticated (since there are no cookies in the request) and reject it.
 
 ### 步骤
+
 1. 在WebSecurityConfigurerAdapter::configure(HttpSecurity http)中打开cors
 
 ```java
@@ -64,4 +68,5 @@ public CorsConfigurationSource corsConfigurationSource() {
 2. [SpringBoot添加支持CORS跨域访问](https://www.cnblogs.com/shihaiming/p/8716830.html)
 
 ## 配置说明
+
 1. [配置说明](./doc/config.md)

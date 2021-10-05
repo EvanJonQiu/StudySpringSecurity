@@ -10,6 +10,7 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -19,6 +20,7 @@ import com.evanjon.studySpring.common.ResultMsg;
 import com.evanjon.studySpring.common.ResultMsgUtil;
 import com.evanjon.studySpring.security.model.SysUserDetails;
 import com.evanjon.studySpring.security.model.UserInfo;
+import com.evanjon.studySpring.security.utils.JwtTokenUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Component
@@ -28,6 +30,9 @@ public class AuthSuccessHandler implements AuthenticationSuccessHandler {
     
     @Autowired
     private ObjectMapper objectMapper;
+    
+    @Autowired
+    private JwtTokenUtil jwtTokenUtil;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
@@ -42,6 +47,9 @@ public class AuthSuccessHandler implements AuthenticationSuccessHandler {
         httpSession.setAttribute("userId", sysUserDetails.getUserId());
         
         response.setContentType("application/json;charset=utf-8");
+        
+        String token = jwtTokenUtil.generateAccessToken(sysUserDetails);
+        response.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + token);
             
         ResultMsg<UserInfo> resultMsg = ResultMsgUtil.success(new UserInfo(sysUserDetails));
         response.getWriter().write(objectMapper.writeValueAsString(resultMsg));
