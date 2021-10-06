@@ -98,3 +98,11 @@ protected void doFilterInternal(HttpServletRequest request, HttpServletResponse 
 }
 ```
 
+## 参考资料
+
+1. [Spring Security with JWT for REST API](https://www.toptal.com/spring/spring-security-tutorial)
+2. [Springboot+SpringSecurity+JWT实现用户登录和权限认证示例](https://blog.csdn.net/chuang123/article/details/107104312/)
+3. [Spring Security: In-Memory Invalidation of JWT Tokens During User Logout](https://stackabuse.com/spring-security-in-memory-invalidation-of-jwt-token-during-user-logout/)
+
+
+
